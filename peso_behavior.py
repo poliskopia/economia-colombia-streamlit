@@ -69,8 +69,6 @@ def load_data():
     data_hist = pd.read_csv(FILE_NAMES[3], delimiter=",")
     data_hist["Date"] = pd.to_datetime(data_hist["Date"], format="%d.%m.%Y")
     data = data.merge(data_hist, on='Date', how="outer")
-    data["series"] = data["Event"].apply(is_not_nan)
-    data["size"] = data["series"].apply(get_size)
 
     data_oil = pd.read_csv(FILE_NAMES[4], delimiter=",")
     data_oil["Date"] = pd.to_datetime(data_oil["Date"])
@@ -132,7 +130,7 @@ fig1 = px.line(
     x='Date',
     y='Ultimo',
     hover_name="Ultimo",
-    hover_data={"Date": False, "Ultimo": False, "series": False, "size": False}
+    hover_data={"Date": False, "Ultimo": False}
     )
 fig1.update_traces(
     line_color='#3440eb',
@@ -145,11 +143,11 @@ fig1.update_traces(
 fig.add_trace(list(fig1.select_traces())[0])
 
 fig2 = px.scatter(
-    queried_data[queried_data["Event"] != ""].dropna(how="any"),
+    queried_data[queried_data["Event"] != ""][["Date", "Event", "Ultimo"]].dropna(how="any"),
     x='Date',
     y='Ultimo',
     hover_name="Event",
-    hover_data={"Date": False, "Ultimo": False, "series": False, "size": False}
+    hover_data={"Date": False, "Ultimo": False}
     )
 fig2.update_traces(marker=dict(size=9, color="#3440eb", line=dict(width=1, color='DarkSlateGrey')),
                    selector=dict(mode='markers'),
