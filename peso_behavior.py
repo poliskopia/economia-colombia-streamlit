@@ -12,7 +12,7 @@ FILE_NAMES = [
 ]
 
 st.set_page_config(layout="wide")
-st.cache_data.clear()
+# st.cache_data.clear()
 
 _, colc, _ = st.columns([1, 2, 1])
 with colc:
