@@ -305,18 +305,5 @@ if queried_data["Date"].dt.year.max() - queried_data["Date"].dt.year.min() > 1:
     fig.update_layout(xaxis=dict(tickformat="%Y"))
 else:
     fig.update_layout(xaxis=dict(tickformat="%b-%Y"))
-
-for tickval in month_formatter:
-    cond_1 = tickval.strftime("%Y-%m-%d") >= d0.strftime("%Y-%m-%d")
-    cond_2 = tickval.strftime("%Y-%m-%d") <= d1.strftime("%Y-%m-%d")
-    if cond_1 and cond_2:
-        fig.add_shape(
-            type="line",
-            x0=tickval,
-            x1=tickval,
-            y0=queried_data['Ultimo'].min(),
-            y1=queried_data['Ultimo'].max(),
-            line=dict(color="gray", width=1, dash="dash"),
-        )
 with left_col:
     st.plotly_chart(fig, use_container_width=True)
