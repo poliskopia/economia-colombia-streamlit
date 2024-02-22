@@ -14,11 +14,15 @@ FILE_NAMES = [
 st.set_page_config(layout="wide")
 # st.cache_data.clear()
 
-_, colc, _ = st.columns([1, 2, 1])
-with colc:
-    st.title("Peso Colombiano")
-    st.markdown("Esta aplicación es un dashboard en Streamlit que puede ser usado "
-                "para analizar el comportamiento del peso colombiano 🪙🇨🇴")
+left_col, right_col = st.columns([7, 3])
+with right_col:
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
     col1, col2 = st.columns(2)
     selected_series = []
     with col1:
@@ -33,7 +37,6 @@ with colc:
             selected = st.checkbox(series_name, value=False)
             if selected:
                 selected_series.append(series_name)
-    st.markdown("Escoge las curvas que quieras remover o añadir a la gráfica")
 
 
 def is_not_nan(x):
@@ -277,7 +280,7 @@ fig.update_layout(
         side="right",
         position=0.15
         ),
-    legend=dict(x=1.1, y=0.5),
+    legend=dict(x=0, y=1.3),
     yaxis3=dict(
         title="Precio Petróleo WTI (USD)",
         titlefont=dict(color="#fcba03"),
@@ -295,15 +298,13 @@ fig.update_layout(
         side="left",
         anchor="free",
         autoshift=True
-        ),
-    xaxis=dict(
-        domain=[0, 1],
-        tickmode="array",
-        tickvals=month_formatter,
-        ticktext=[dt.strftime("%b,  %Y") for dt in month_formatter],
-        tickangle=90
         )
     )
+
+if queried_data["Date"].dt.year.max() - queried_data["Date"].dt.year.min() > 1:
+    fig.update_layout(xaxis=dict(tickformat="%Y"))
+else:
+    fig.update_layout(xaxis=dict(tickformat="%b-%Y"))
 
 for tickval in month_formatter:
     cond_1 = tickval.strftime("%Y-%m-%d") >= d0.strftime("%Y-%m-%d")
@@ -317,13 +318,5 @@ for tickval in month_formatter:
             y1=queried_data['Ultimo'].max(),
             line=dict(color="gray", width=1, dash="dash"),
         )
-st.plotly_chart(fig, use_container_width=True)
-
-_, colc, _ = st.columns([1, 2, 1])
-with colc:
-    st.markdown("# Fuentes")
-    st.markdown("[Precio Petróleo Crudo](https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm)")
-    st.markdown("[Dólar a COP](https://es.investing.com/currencies/usd-cop-historical-data)")
-    st.markdown("[Fertilizantes](https://www.fedegan.org.co/estadisticas/precios)")
-    st.markdown("[Inflación Colombia](https://www.banrep.gov.co/es/estadisticas/precios-e-inflacion)")
-    st.markdown("[Tasa interés BANREP](https://www.banrep.gov.co/es/estadisticas/tasas-interes-politica-monetaria)")
+with left_col:
+    st.plotly_chart(fig, use_container_width=True)
